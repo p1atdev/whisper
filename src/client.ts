@@ -4,10 +4,10 @@ import {
   APIURLType,
   Authorization,
   Bearer,
+  GraphQueryIds,
   GuestToken,
   TwitterURL,
 } from "./mod.ts";
-import { GraphQueryIds } from "../types/mod.ts";
 
 export interface RequestOptions {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";

@@ -33,6 +33,24 @@ export class Bearer extends Authorization {
   }
 }
 
+/**
+ * Class of bearer token.
+ */
+export class OAuth extends Authorization {
+  private constructor(token: string) {
+    super("OAuth", token);
+  }
+
+  /**
+   * Use your own oauth token if you want to use.
+   * @param token
+   * @returns
+   */
+  static Own(token: string): Bearer {
+    return new OAuth(token);
+  }
+}
+
 export type APIURLType =
   | "gql"
   | "api/1.1"
