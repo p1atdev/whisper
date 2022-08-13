@@ -1,16 +1,18 @@
-import { assertExists, assertNotEquals } from "../deps.ts";
+import { assertEquals, assertExists, assertNotEquals } from "../deps.ts";
 import { Bearer, TwitterAPI } from "../src/mod.ts";
 
-Deno.test("Create Twitter API client", async () => {
-  const client = new TwitterAPI(Bearer.Web, await TwitterAPI.getGuestToken());
+Deno.test("Create Twitter API client", () => {
+  const client = new TwitterAPI(Bearer.Web);
 
-  assertExists(client.guestToken.token);
+  assertExists(client.auth.token);
 });
 
 Deno.test("Refrech client guest token", async () => {
-  const client = new TwitterAPI(Bearer.Web, await TwitterAPI.getGuestToken());
+  const client = new TwitterAPI(Bearer.Web);
 
   const before = client.guestToken;
+
+  assertEquals(before, undefined);
 
   await client.refreshGuestToken();
 

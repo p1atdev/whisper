@@ -36,15 +36,13 @@ export interface RequestOptions {
 
 export class TwitterAPI {
   auth: Authorization;
-  guestToken: GuestToken;
+  guestToken?: GuestToken;
   graphQueryIds?: GraphQueryIds;
 
   constructor(
     private _auth: Authorization = Bearer.Web,
-    private _guestToken: GuestToken,
   ) {
     this.auth = _auth;
-    this.guestToken = _guestToken;
   }
 
   /**
@@ -72,9 +70,13 @@ export class TwitterAPI {
    * })
    */
   async request(options: RequestOptions): Promise<Response> {
+    if (this.guestToken === undefined) {
+      await this.refreshGuestToken();
+    }
+
     const header = APIRequestHeader({
       cookie: options.cookie,
-      guestToken: this.guestToken.token,
+      guestToken: this.guestToken!.token,
       auth: {
         type: this.auth.type,
         token: this.auth.token,

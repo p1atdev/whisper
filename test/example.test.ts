@@ -2,7 +2,7 @@ import { assertEquals, assertExists } from "../deps.ts";
 import { Bearer, RequestQuery, TwitterAPI } from "../src/mod.ts";
 
 Deno.test("Search typehead", async () => {
-  const client = new TwitterAPI(Bearer.Web, await TwitterAPI.getGuestToken());
+  const client = new TwitterAPI(Bearer.Web);
 
   const query = new RequestQuery({
     q: "@deno_land",
@@ -25,10 +25,7 @@ Deno.test("Search typehead", async () => {
 });
 
 Deno.test("User By Screen Name", async () => {
-  const client = new TwitterAPI(
-    Bearer.Web,
-    await TwitterAPI.getGuestToken(),
-  );
+  const client = new TwitterAPI(Bearer.Web);
 
   const query = new RequestQuery({
     variables: {
@@ -51,7 +48,7 @@ Deno.test("User By Screen Name", async () => {
 });
 
 Deno.test("User Tweets", async () => {
-  const client = new TwitterAPI(Bearer.Web, await TwitterAPI.getGuestToken());
+  const client = new TwitterAPI(Bearer.Web);
 
   const query = new RequestQuery({
     variables: {
@@ -92,4 +89,44 @@ Deno.test("User Tweets", async () => {
   //   console.dir(timeline, { depth: 10 });
 
   assertExists(timeline);
+});
+
+Deno.test("Email available", async () => {
+  const client = new TwitterAPI(Bearer.Web);
+
+  const query = new RequestQuery({
+    email: "twitter@example.com",
+  });
+
+  const res = await client.request({
+    method: "GET",
+    urlType: "i/api/i",
+    path: "/users/email_available.json",
+    query: query,
+  });
+
+  const json = await res.json();
+
+  assertEquals(json.valid, false);
+  assertEquals(json.taken, false);
+});
+
+Deno.test("Search adaptive", async () => {
+  const client = new TwitterAPI(Bearer.Web);
+
+  const query = new RequestQuery({
+    q: "from:@deno_land",
+    count: 3,
+  });
+
+  const res = await client.request({
+    method: "GET",
+    urlType: "i/api/2",
+    path: "/search/adaptive.json",
+    query: query,
+  });
+
+  const json = await res.json();
+
+  assertExists(json.globalObjects.users["1108769816230293504"]);
 });
