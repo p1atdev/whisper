@@ -1,17 +1,17 @@
 {
-    "tasks": {
-        "test": "deno test --allow-net --allow-env",
-        "test:cov": "deno test -A --coverage=coverage && deno coverage ./coverage --lcov --output=coverage.lcov",
-        "cache": "deno cache ./deps.ts"
-    },
-    "format": {
-        "files": {
-            "exclude": ["*.md", "LICENSE"]
-        }
-    },
-    "lint": {
-        "files": {
-            "exclude": ["*.md", "LICENSE"]
-        }
+  "tasks": {
+    "test": "deno test --allow-net --allow-env",
+    "test:cov": "deno test -A --coverage=coverage && deno coverage ./coverage --lcov --output=coverage.lcov",
+    "cache": "deno cache ./deps.ts"
+  },
+  "format": {
+    "files": {
+      "exclude": ["*.md", "LICENSE"]
     }
+  },
+  "lint": {
+    "files": {
+      "exclude": ["*.md", "LICENSE"]
+    }
+  }
 }
