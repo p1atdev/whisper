@@ -76,13 +76,13 @@ export class TwitterURL {
         return new TwitterURL("https://api.twitter.com/1.1");
       }
       case "i/api/1.1": {
-        return new TwitterURL("https://api.twitter.com/i/api/1.1");
+        return new TwitterURL("https://twitter.com/i/api/1.1");
       }
       case "i/api/2": {
-        return new TwitterURL("https://api.twitter.com/i/api/2");
+        return new TwitterURL("https://twitter.com/i/api/2");
       }
       case "i/api/i": {
-        return new TwitterURL("https://api.twitter.com/i/api/i");
+        return new TwitterURL("https://twitter.com/i/api/i");
       }
     }
   }
