@@ -1,0 +1,27 @@
+allow:
+  - net
+  - env
+
+envFile: 
+  - ./.env
+
+scripts:
+  start: 
+    cmd: deno run ./server.ts
+    unstable: true
+  dev:
+    cmd: deno run ./server.ts
+    watch: true
+    unstable: true
+
+  cache:
+    cmd: deno cache --unstable ./deps.ts
+  test:
+    cmd: deno test -A --unstable
+    
+
+  fmt:
+    cmd: deno fmt
+  lint:
+    cmd: deno lint
+  
