@@ -9,13 +9,28 @@ import {
   TwitterURL,
 } from "./mod.ts";
 
+/**
+ * URL search query parameters
+ */
+export class RequestQuery {
+  data: Record<string, string> = {};
+
+  constructor(data?: Record<string, unknown>) {
+    if (data) {
+      Object.entries(data).forEach(([key, value]) => {
+        this.data[key] = JSON.stringify(value);
+      });
+    }
+  }
+}
+
 export interface RequestOptions {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   urlType: APIURLType;
   path: string;
   cookie?: Map<string, string> | string;
-  query?: Map<string, JSON>;
-  body?: Map<string, JSON>;
+  query?: RequestQuery;
+  body?: Record<string, unknown>;
 }
 
 export class TwitterAPI {
@@ -39,6 +54,16 @@ export class TwitterAPI {
     this.guestToken = await GuestToken.getToken();
   }
 
+  /**
+   * Send HTTP request.
+   * @param options
+   * @returns
+   * @example await request({
+   *  method: "GET",
+   *  urlType: "api/1.1",
+   *  path: "/search/typeahead.json",
+   * })
+   */
   async request(options: RequestOptions): Promise<Response> {
     const header = APIRequestHeader({
       cookie: options.cookie,
@@ -63,7 +88,7 @@ export class TwitterAPI {
       url: TwitterURL.API(options.urlType),
       path: path,
       headers: header,
-      query: options.query,
+      query: options.query?.data,
       body: options.body,
     });
 

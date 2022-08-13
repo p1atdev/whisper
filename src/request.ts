@@ -17,8 +17,8 @@ export interface APIRequestOptions {
   url: TwitterURL;
   path: string;
   headers: Headers;
-  query?: Map<string, JSON>;
-  body?: Map<string, JSON>;
+  query?: Record<string, string>;
+  body?: Record<string, unknown>;
 }
 
 export const APIRequestHeader = (options: APIRequestHeaderOptions): Headers => {
@@ -48,8 +48,8 @@ export const APIRequest = async (
   const url = new URL(`${options.url.value}${options.path}`);
 
   if (options.query) {
-    options.query.forEach((value, key) => {
-      url.searchParams.append(key, JSON.stringify(value));
+    Object.entries(options.query).forEach(([key, value]) => {
+      url.searchParams.append(key, value);
     });
   }
 
