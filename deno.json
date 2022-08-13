@@ -4,14 +4,14 @@
     "test:cov": "deno test -A --coverage=coverage && deno coverage ./coverage --lcov --output=coverage.lcov",
     "cache": "deno cache ./deps.ts"
   },
-  "format": {
+  "fmt": {
     "files": {
-      "exclude": ["*.md", "LICENSE"]
+      "exclude": ["*.md", "LICENSE", "*.json"]
     }
   },
   "lint": {
     "files": {
-      "exclude": ["*.md", "LICENSE"]
+      "exclude": ["*.md", "LICENSE", "*.json"]
     }
   }
 }
