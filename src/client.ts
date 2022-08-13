@@ -4,6 +4,7 @@ import {
   APIURLType,
   Authorization,
   Bearer,
+  GraphQuery,
   GraphQueryIds,
   GuestToken,
   TwitterURL,
@@ -35,9 +36,8 @@ export interface RequestOptions {
 
 export class TwitterAPI {
   auth: Authorization;
-  graphQueryIds: GraphQueryIds = new Map();
-
   guestToken: GuestToken;
+  graphQueryIds?: GraphQueryIds;
 
   constructor(
     private _auth: Authorization = Bearer.Web,
@@ -52,6 +52,13 @@ export class TwitterAPI {
    */
   async refreshGuestToken() {
     this.guestToken = await GuestToken.getToken();
+  }
+
+  /**
+   * Refresh the graph query id
+   */
+  async refreshGraphQueryIds() {
+    this.graphQueryIds = await GraphQuery.getIds();
   }
 
   /**
@@ -74,10 +81,17 @@ export class TwitterAPI {
       },
     });
 
-    const path: string = (() => {
+    const path: string = await (async () => {
+      if (this.graphQueryIds == null) {
+        await this.refreshGraphQueryIds();
+      }
+
       if (options.urlType == "gql") {
-        const id = this.graphQueryIds.get(options.path);
-        return `${id}/${options.path}`;
+        const id = this.graphQueryIds!.get(options.path);
+        if (id == undefined) {
+          throw new Error(`Graph query id not found: ${options.path}`);
+        }
+        return `/${id}/${options.path}`;
       } else {
         return options.path;
       }
