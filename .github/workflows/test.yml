@@ -14,17 +14,11 @@ jobs:
           deno-version: v1.x # use the latest deno
 
       - name: Run test
-        # ↓ if you use env
-        # env:
-        #   YOUR_SECRET_KEY: ${{ secrets.YOUR_SECRET_KEY }} 
-        run: deno task test
+        run: deno task test:cov
 
-        # ↓ if you use Codecov
-        # run: deno task test:cov
-
-      # - name: Codecov
-      #   uses: codecov/codecov-action@v1.5.2
-      #   with:
-      #     file: ./coverage.lcov
-      #     fail_ci_if_error: true
+      - name: Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.lcov
+          fail_ci_if_error: true
   
