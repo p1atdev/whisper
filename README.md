@@ -11,11 +11,11 @@ A client that wraps the API behind Twitter.
 
 ## Features
 
--   You can use endpoints not officially provided
-    -   GraphQL endpoint (`UserByScreenName`, `UserTweets`, etc...)
-    -   "i" endpoint (`/users/email_available.json`, etc...)
--   You can use the hidden api without any tokens
-    -   Whisper uses the official web client's token
+- You can use endpoints not officially provided
+  - GraphQL endpoint (`UserByScreenName`, `UserTweets`, etc...)
+  - "i" endpoint (`/users/email_available.json`, etc...)
+- You can use the hidden api without any tokens
+  - Whisper uses the official web client's token
 
 ## Example
 
@@ -24,91 +24,92 @@ Full example code can be seen on `/test/example.test.ts`
 ### User By Screen Name (GraphQL endpoint)
 
 ```ts
-const client = new TwitterAPI(Bearer.Web)
+const client = new TwitterAPI(Bearer.Web);
 
 const query = new RequestQuery({
-    variables: {
-        screen_name: "deno_land",
-        withSafetyModeUserFields: true,
-        withSuperFollowsUserFields: true,
-    },
-})
+  variables: {
+    screen_name: "deno_land",
+    withSafetyModeUserFields: true,
+    withSuperFollowsUserFields: true,
+  },
+});
 
 const res = await client.request({
-    method: "GET",
-    urlType: "gql",
-    path: "UserByScreenName",
-    query: query,
-})
+  method: "GET",
+  urlType: "gql",
+  path: "UserByScreenName",
+  query: query,
+});
 
-const json = await res.json()
+const json = await res.json();
 
-assertEquals(json.data.user.result.rest_id, "1108769816230293504")
+assertEquals(json.data.user.result.rest_id, "1108769816230293504");
 ```
 
 ### Search Adaptive (v2 endpoint)
 
 ```ts
-const client = new TwitterAPI(Bearer.Web)
+const client = new TwitterAPI(Bearer.Web);
 
 const query = new RequestQuery({
-    q: "from:@deno_land",
-    count: 3,
-})
+  q: "from:@deno_land",
+  count: 3,
+});
 
 const res = await client.request({
-    method: "GET",
-    urlType: "i/api/2",
-    path: "/search/adaptive.json",
-    query: query,
-})
+  method: "GET",
+  urlType: "i/api/2",
+  path: "/search/adaptive.json",
+  query: query,
+});
 
-const json = await res.json()
+const json = await res.json();
 
-assertExists(json.globalObjects.users["1108769816230293504"])
+assertExists(json.globalObjects.users["1108769816230293504"]);
 ```
 
 ### User Tweets (GraphQL endpoint)
 
 ```ts
-const client = new TwitterAPI(Bearer.Web)
+const client = new TwitterAPI(Bearer.Web);
 
 const query = new RequestQuery({
-    variables: {
-        userId: "1108769816230293504",
-        count: 4,
-        includePromotedContent: false,
-        withVoice: false,
-        withDownvotePerspective: true,
-        withReactionsMetadata: false,
-        withReactionsPerspective: false,
-        withSuperFollowsTweetFields: false,
-        withSuperFollowsUserFields: false,
-    },
-    features: {
-        tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled: false,
-        interactive_text_enabled: true,
-        standardized_nudges_misinfo: true,
-        responsive_web_edit_tweet_api_enabled: true,
-        responsive_web_enhance_cards_enabled: false,
-        vibe_api_enabled: true,
-        dont_mention_me_view_api_enabled: true,
-        responsive_web_uc_gql_enabled: true,
-    },
-})
+  variables: {
+    userId: "1108769816230293504",
+    count: 4,
+    includePromotedContent: false,
+    withVoice: false,
+    withDownvotePerspective: true,
+    withReactionsMetadata: false,
+    withReactionsPerspective: false,
+    withSuperFollowsTweetFields: false,
+    withSuperFollowsUserFields: false,
+  },
+  features: {
+    tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
+      false,
+    interactive_text_enabled: true,
+    standardized_nudges_misinfo: true,
+    responsive_web_edit_tweet_api_enabled: true,
+    responsive_web_enhance_cards_enabled: false,
+    vibe_api_enabled: true,
+    dont_mention_me_view_api_enabled: true,
+    responsive_web_uc_gql_enabled: true,
+  },
+});
 
 const res = await client.request({
-    method: "GET",
-    urlType: "gql",
-    path: "UserTweets",
-    query: query,
-})
+  method: "GET",
+  urlType: "gql",
+  path: "UserTweets",
+  query: query,
+});
 
-const json = await res.json()
+const json = await res.json();
 
-const timeline = json.data.user.result.timeline
+const timeline = json.data.user.result.timeline;
 
-console.dir(timeline, { depth: 10 })
+console.dir(timeline, { depth: 10 });
 
 // Output:
 //
@@ -148,23 +149,23 @@ console.dir(timeline, { depth: 10 })
 ### Email Available (i endpoint)
 
 ```ts
-const client = new TwitterAPI(Bearer.Web)
+const client = new TwitterAPI(Bearer.Web);
 
 const query = new RequestQuery({
-    email: "twitter@example.com",
-})
+  email: "twitter@example.com",
+});
 
 const res = await client.request({
-    method: "GET",
-    urlType: "i/api/i",
-    path: "/users/email_available.json",
-    query: query,
-})
+  method: "GET",
+  urlType: "i/api/i",
+  path: "/users/email_available.json",
+  query: query,
+});
 
-const json = await res.json()
+const json = await res.json();
 
-assertEquals(json.valid, false)
-assertEquals(json.taken, false)
+assertEquals(json.valid, false);
+assertEquals(json.taken, false);
 ```
 
 ## Note
