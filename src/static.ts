@@ -53,6 +53,7 @@ export class OAuth extends Authorization {
 
 export type APIURLType =
   | "gql"
+  | "api"
   | "api/1.1"
   | "i/api/1.1"
   | "i/api/2"
@@ -71,6 +72,9 @@ export class TwitterURL {
     switch (urlType) {
       case "gql": {
         return new TwitterURL("https://api.twitter.com/graphql");
+      }
+      case "api": {
+        return new TwitterURL("https://api.twitter.com");
       }
       case "api/1.1": {
         return new TwitterURL("https://api.twitter.com/1.1");
