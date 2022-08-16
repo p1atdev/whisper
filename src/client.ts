@@ -19,7 +19,9 @@ export class RequestQuery {
   constructor(data?: Record<string, unknown>) {
     if (data) {
       Object.entries(data).forEach(([key, value]) => {
-        this.data[key] = JSON.stringify(value);
+        this.data[key] = typeof value === "string"
+          ? value
+          : JSON.stringify(value);
       });
     }
   }
