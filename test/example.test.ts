@@ -21,7 +21,10 @@ Deno.test("Search typehead", async () => {
 
   assertEquals(json.users[0].screen_name, "deno_land");
 
-  assertExists(json.users[0].profile_image_url_https);
+  assertExists(
+    json.users[0].profile_image_url_https,
+    "profile image url should exist",
+  );
 });
 
 Deno.test("User By Screen Name", async () => {
@@ -88,7 +91,7 @@ Deno.test("User Tweets", async () => {
 
   //   console.dir(timeline, { depth: 10 });
 
-  assertExists(timeline);
+  assertExists(timeline, "timeline should exist");
 });
 
 Deno.test("Email available", async () => {
@@ -107,8 +110,8 @@ Deno.test("Email available", async () => {
 
   const json = await res.json();
 
-  assertEquals(json.valid, false);
-  assertEquals(json.taken, false);
+  assertEquals(json.valid, false, "valid should false");
+  assertEquals(json.taken, true, "taken should true");
 });
 
 Deno.test("Search adaptive", async () => {
@@ -128,5 +131,8 @@ Deno.test("Search adaptive", async () => {
 
   const json = await res.json();
 
-  assertExists(json.globalObjects.users["1108769816230293504"]);
+  assertExists(
+    json.globalObjects.users["1108769816230293504"],
+    "deno_land should exist",
+  );
 });
