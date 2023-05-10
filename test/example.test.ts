@@ -17,6 +17,8 @@ Deno.test("Search typehead", async () => {
     query: query,
   });
 
+  assertEquals(res.status, 200);
+
   const json = await res.json();
 
   assertEquals(json.users[0].screen_name, "deno_land");
@@ -34,7 +36,15 @@ Deno.test("User By Screen Name", async () => {
     variables: {
       screen_name: "deno_land",
       withSafetyModeUserFields: true,
-      withSuperFollowsUserFields: true,
+    },
+    features: {
+      blue_business_profile_image_shape_enabled: true,
+      responsive_web_graphql_exclude_directive_enabled: true,
+      verified_phone_label_enabled: false,
+      highlights_tweets_tab_ui_enabled: false,
+      creator_subscriptions_tweet_preview_api_enabled: false,
+      responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+      responsive_web_graphql_timeline_navigation_enabled: true,
     },
   });
 
@@ -44,6 +54,10 @@ Deno.test("User By Screen Name", async () => {
     path: "UserByScreenName",
     query: query,
   });
+
+  // console.log(res.status)
+
+  assertEquals(res.status, 200);
 
   const json = await res.json();
 
@@ -57,24 +71,34 @@ Deno.test("User Tweets", async () => {
     variables: {
       userId: "1108769816230293504",
       count: 4,
-      includePromotedContent: false,
-      withVoice: false,
-      withDownvotePerspective: true,
-      withReactionsMetadata: false,
-      withReactionsPerspective: false,
-      withSuperFollowsTweetFields: false,
-      withSuperFollowsUserFields: false,
+      includePromotedContent: true,
+      withQuickPromoteEligibilityTweetFields: true,
+      withVoice: true,
     },
     features: {
+      rweb_lists_timeline_redesign_enabled: false,
+      blue_business_profile_image_shape_enabled: true,
+      responsive_web_graphql_exclude_directive_enabled: true,
+      verified_phone_label_enabled: false,
+      creator_subscriptions_tweet_preview_api_enabled: false,
+      responsive_web_graphql_timeline_navigation_enabled: true,
+      responsive_web_graphql_skip_user_profile_image_extensions_enabled: false,
+      tweetypie_unmention_optimization_enabled: true,
+      vibe_api_enabled: true,
+      responsive_web_edit_tweet_api_enabled: true,
+      graphql_is_translatable_rweb_tweet_is_translatable_enabled: true,
+      view_counts_everywhere_api_enabled: true,
+      longform_notetweets_consumption_enabled: true,
+      tweet_awards_web_tipping_enabled: false,
+      freedom_of_speech_not_reach_fetch_enabled: true,
+      standardized_nudges_misinfo: true,
       tweet_with_visibility_results_prefer_gql_limited_actions_policy_enabled:
         false,
       interactive_text_enabled: true,
-      standardized_nudges_misinfo: true,
-      responsive_web_edit_tweet_api_enabled: true,
+      responsive_web_text_conversations_enabled: false,
+      longform_notetweets_rich_text_read_enabled: true,
+      longform_notetweets_inline_media_enabled: false,
       responsive_web_enhance_cards_enabled: false,
-      vibe_api_enabled: true,
-      dont_mention_me_view_api_enabled: true,
-      responsive_web_uc_gql_enabled: true,
     },
   });
 
@@ -85,11 +109,13 @@ Deno.test("User Tweets", async () => {
     query: query,
   });
 
+  assertEquals(res.status, 200);
+
   const json = await res.json();
 
   const timeline = json.data.user.result.timeline;
 
-  //   console.dir(timeline, { depth: 10 });
+  console.dir(timeline, { depth: 10 });
 
   assertExists(timeline, "timeline should exist");
 });
@@ -108,31 +134,35 @@ Deno.test("Email available", async () => {
     query: query,
   });
 
+  assertEquals(res.status, 200);
+
   const json = await res.json();
 
   assertEquals(json.valid, false, "valid should false");
   assertEquals(json.taken, true, "taken should true");
 });
 
-Deno.test("Search adaptive", async () => {
-  const client = new TwitterAPI(Bearer.Web);
+// // deprecated by twitter...
+// Deno.test("Search adaptive", async () => {
+//     const client = new TwitterAPI(Bearer.Web)
 
-  const query = new RequestQuery({
-    q: "from:@deno_land",
-    count: 3,
-  });
+//     const query = new RequestQuery({
+//         q: "from:@deno_land",
+//         count: 10,
+//     })
 
-  const res = await client.request({
-    method: "GET",
-    urlType: "i/api/2",
-    path: "/search/adaptive.json",
-    query: query,
-  });
+//     const res = await client.request({
+//         method: "GET",
+//         urlType: "i/api/2",
+//         path: "/search/adaptive.json",
+//         query: query,
+//     })
 
-  const json = await res.json();
+//     assertEquals(res.status, 200)
 
-  assertExists(
-    json.globalObjects.users["1108769816230293504"],
-    "deno_land should exist",
-  );
-});
+//     const json = await res.json()
+
+//     // console.dir(json, { depth: 10 });
+
+//     assertExists(json.globalObjects.users["1108769816230293504"], "deno_land should exist")
+// })

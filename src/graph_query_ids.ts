@@ -15,9 +15,29 @@ export class GraphQuery {
    * @returns Promise<GraphQueryId[]>
    */
   static getIds = async (): Promise<GraphQueryIds> => {
+    const firstRes = await fetch(TwitterURL.WebClient.value, {
+      headers: {
+        "User-Agent": UserAgent.Firefox,
+      },
+      redirect: "manual",
+    });
+
+    firstRes.body?.cancel();
+
+    const setCookie = firstRes.headers.get("set-cookie");
+
+    const cookie = setCookie
+      ?.split(",")
+      .map((cookie) => {
+        return cookie.split(";")[0];
+      })
+      .join("; ") || "";
+
+    // retry
     const html = await fetch(TwitterURL.WebClient.value, {
       headers: {
         "User-Agent": UserAgent.Firefox,
+        Cookie: cookie,
       },
     });
 

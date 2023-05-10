@@ -7,6 +7,11 @@
   "fmt": {
     "files": {
       "exclude": ["*.md", "LICENSE", "*.json"]
+    },
+    "options": {
+      "indentWidth": 2,
+      "semiColons": true,
+      "singleQuote": false
     }
   },
   "lint": {
